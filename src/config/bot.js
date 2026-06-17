@@ -542,6 +542,39 @@ export function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
+const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+const helloCommand = new SlashCommandBuilder()
+    .setName('hello')
+    .setDescription('Greets the user!');
+
+client.once('ready', async () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    
+    const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+    try {
+        await rest.put(
+            Routes.applicationCommands(client.user.id),
+            { body: [helloCommand.toJSON()] },
+        );
+        console.log('Successfully registered global hello command.');
+    } catch (error) {
+        console.error('Failed to register command:', error);
+    }
+});
+
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+
+    if (interaction.commandName === 'hello') {
+        await interaction.reply('Hello! :wave:');
+    }
+});
+
+client.login(process.env.TOKEN);
+
 export default botConfig;
 
 
