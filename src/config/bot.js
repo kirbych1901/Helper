@@ -502,30 +502,6 @@ export function validateConfig(config) {
   return errors;
 }
 
-
-import os
-import discord
-from discord import app_commands
-
-class MyBot(discord.Client):
-    def __init__(self):
-        super().__init__(intents=discord.Intents.default())
-        self.tree = app_commands.CommandTree(self)
-
-    async def setup_hook(self):
-        # Registers the command globally to activate the badge
-        await self.tree.sync()
-        print("Global slash commands synced successfully!")
-
-client = MyBot()
-
-@client.tree.command(name="hello", description="Greets the user!")
-async def hello(interaction: discord.Interaction):
-    # Replies back with the greeting and wave emoji
-    await interaction.response.send_message("Hello! :wave:")
-
-client.run(os.environ.get('MTUxNjE3NTc5ODU3NzQwMTkxNw.GGIkcD.jpiMPFQDI-7VF05y-2aAuxv_RcAxj7kSd3tYbc'))
-
 export default botConfig;
 
 
